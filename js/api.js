@@ -1,25 +1,20 @@
 // fetchTopHeadlines() - Fetches top headlines from GNews
 async function fetchTopHeadlines(category) {
-  // GNews requires a category. If none provided, default to general.
-  const cat = (category && category !== "general") ? category : "general";
-  
-  let url = `${NEWS_API_CONFIG.baseUrl}/top-headlines?`;
-  url += `category=${cat}`;
-  url += `&lang=${NEWS_API_CONFIG.defaultLang}`;
-  url += `&country=${NEWS_API_CONFIG.defaultCountry}`;
-  url += `&max=${NEWS_API_CONFIG.pageSize}`;
+  let url = `${NEWS_API_CONFIG.baseUrl}?`;
+  url += `country=${NEWS_API_CONFIG.defaultCountry}`;
   url += `&apikey=${NEWS_API_CONFIG.apiKey}`;
+
+  if (category && category !== "general") {
+    url += `&category=${category}`;
+  }
 
   return await makeApiRequest(url);
 }
 
 // searchNews() - Searches for news articles by keyword
 async function searchNews(query) {
-  let url = `${NEWS_API_CONFIG.baseUrl}/search?`;
+  let url = `${NEWS_API_CONFIG.baseUrl}?`;
   url += `q=${encodeURIComponent(query)}`;
-  url += `&lang=${NEWS_API_CONFIG.defaultLang}`;
-  url += `&country=${NEWS_API_CONFIG.defaultCountry}`;
-  url += `&max=${NEWS_API_CONFIG.pageSize}`;
   url += `&apikey=${NEWS_API_CONFIG.apiKey}`;
 
   return await makeApiRequest(url);
@@ -43,11 +38,11 @@ async function makeApiRequest(url) {
       return { success: false, articles: [], error: data.errors?.[0] || "An error occurred fetching news." };
     }
 
-    if (!data.articles || data.articles.length === 0) {
+    if (!data.results || data.results.length === 0) {
       return { success: true, articles: [], error: null };
     }
 
-    return { success: true, articles: data.articles, error: null };
+    return { success: true, articles: data.results, error: null };
 
   } catch (error) {
     console.error("Network error:", error);

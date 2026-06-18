@@ -5,10 +5,10 @@
 
 const NEWS_API_CONFIG = {
   // GNews API Key
-  apiKey: "9c768b0180d7d3c9492d9ebd8fb46dcd",
+  apiKey: "pub_1a0e0823ab9f4fd6915080b204a6c48a",
 
   // Base URL for GNews
-  baseUrl: "https://gnews.io/api/v4",
+  baseUrl: "https://newsdata.io/api/1/news",
 
   // Default parameters
   defaultCountry: "us",
