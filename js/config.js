@@ -5,15 +5,16 @@
 */
 
 const NEWS_API_CONFIG = {
-  // Replace this with your actual NewsAPI key
-  apiKey: "16271c730595438ab845d52a8eeb6903",
+  // Using a free open-source proxy for NewsAPI that doesn't require an API key
+  // and works on GitHub Pages!
+  apiKey: "",
 
-  // Base URL for the NewsAPI 
-  baseUrl: "https://newsapi.org/v2",
+  // Base URL for the NewsAPI proxy
+  baseUrl: "https://saurav.tech/NewsAPI",
 
-  // Default country for top headlines
+  // Default country for top headlines (us, in, au, ru, fr, gb)
   defaultCountry: "us",
 
-  // Default page size (number of articles per request)
+  // Default page size (number of articles per request) - Note: Proxy returns all results
   pageSize: 12
 };
