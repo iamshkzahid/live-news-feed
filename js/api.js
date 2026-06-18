@@ -3,48 +3,50 @@
    ============================================
 */
 
-// fetchTopHeadlines() - Fetches top headlines from NewsAPI
+// fetchTopHeadlines() - Fetches top headlines from NewsAPI Proxy
 async function fetchTopHeadlines(category) {
-  // Build the API URL
-  let url = `${NEWS_API_CONFIG.baseUrl}/top-headlines?`;
-  url += `country=${NEWS_API_CONFIG.defaultCountry}`;
-  url += `&pageSize=${NEWS_API_CONFIG.pageSize}`;
-  url += `&apiKey=${NEWS_API_CONFIG.apiKey}`;
-
-  // Add category filter if provided
-  if (category && category !== "general") {
-    url += `&category=${category}`;
-  }
+  // Build the API URL for the saurav.tech proxy
+  const cat = category || "general";
+  const url = `${NEWS_API_CONFIG.baseUrl}/top-headlines/category/${cat}/${NEWS_API_CONFIG.defaultCountry}.json`;
 
   // Make the API request
-  return await makeApiRequest(url);
+  const result = await makeApiRequest(url);
+  
+  // Apply pagination locally if needed, since proxy returns all
+  if (result.success && result.articles) {
+    result.articles = result.articles.slice(0, NEWS_API_CONFIG.pageSize);
+  }
+  
+  return result;
 }
 
 // searchNews() - Searches for news articles by keyword
 async function searchNews(query) {
-  // Build the search API URL
-  let url = `${NEWS_API_CONFIG.baseUrl}/everything?`;
-  url += `q=${encodeURIComponent(query)}`;
-  url += `&pageSize=${NEWS_API_CONFIG.pageSize}`;
-  url += `&sortBy=publishedAt`;
-  url += `&apiKey=${NEWS_API_CONFIG.apiKey}`;
+  // Build the search API URL (Using CNN as a broad source since proxy doesn't support generic keyword search)
+  const url = `${NEWS_API_CONFIG.baseUrl}/everything/cnn.json`;
 
   // Make the API request
-  return await makeApiRequest(url);
+  const result = await makeApiRequest(url);
+  
+  if (result.success && result.articles) {
+    // Filter the articles manually based on the query
+    const lowerQuery = query.toLowerCase();
+    result.articles = result.articles.filter(article => {
+      const titleMatch = article.title && article.title.toLowerCase().includes(lowerQuery);
+      const descMatch = article.description && article.description.toLowerCase().includes(lowerQuery);
+      return titleMatch || descMatch;
+    });
+    
+    // Apply pagination
+    result.articles = result.articles.slice(0, NEWS_API_CONFIG.pageSize);
+  }
+  
+  return result;
 }
 
 // makeApiRequest() - Makes a fetch request and handles errors
 async function makeApiRequest(url) {
   try {
-    // Check if API key is configured
-    if (NEWS_API_CONFIG.apiKey === "YOUR_API_KEY_HERE") {
-      return {
-        success: false,
-        articles: [],
-        error: "API key not configured. Please add your NewsAPI key in js/config.js. Get a free key at https://newsapi.org/"
-      };
-    }
-
     // Send the fetch request
     const response = await fetch(url);
 
@@ -53,23 +55,6 @@ async function makeApiRequest(url) {
 
     // Check if the API returned an error
     if (data.status !== "ok") {
-      // Handle specific API errors
-      if (response.status === 401) {
-        return {
-          success: false,
-          articles: [],
-          error: "Invalid API key. Please check your NewsAPI key in js/config.js."
-        };
-      }
-
-      if (response.status === 429) {
-        return {
-          success: false,
-          articles: [],
-          error: "Too many requests. Please wait a moment and try again."
-        };
-      }
-
       return {
         success: false,
         articles: [],
@@ -103,3 +88,4 @@ async function makeApiRequest(url) {
     };
   }
 }
+
