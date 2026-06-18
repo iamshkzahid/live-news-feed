@@ -1,17 +1,13 @@
+# API Configuration (contains secret keys)
+js/config.js
+
 # OS files
 .DS_Store
 Thumbs.db
 
-# Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Logs
-*.log
-
-# Dependencies (not used, but just in case)
+# Dependencies
 node_modules/
 
+# IDE
+.vscode/
+.idea/

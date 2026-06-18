@@ -1,14 +1,7 @@
 /* ============================================
    UI.JS — News Feed DOM Rendering
    ============================================
-   Purpose: Handles ALL visual updates for the News Feed.
-   
-   Functions:
-   - Show/hide loading spinner
-   - Render news article cards
-   - Show error messages
-   - Show empty state
-   ============================================ */
+*/
 
 // showLoading() - Shows a loading spinner while news is being fetched
 function showLoading() {

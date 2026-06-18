@@ -1,13 +1,7 @@
 /* ============================================
    MAIN.JS — News Feed Entry Point
    ============================================
-   Purpose: Initializes the News Feed application.
-   
-   Steps:
-   1. Load top headlines on page load
-   2. Set up search form handler
-   3. Set up category filter buttons
-   ============================================ */
+*/
 
 document.addEventListener("DOMContentLoaded", function () {
   // Load initial news (top headlines)
