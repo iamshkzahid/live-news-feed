@@ -91,11 +91,23 @@ body {
 }
 
 .btn {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-md);
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: var(--font-family);
+  text-decoration: none;
+  font-weight: 500;
   transition: all var(--transition);
+}
+.btn:hover {
+  opacity: 0.9;
+}
+.btn-small {
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  border-radius: 20px;
 }
 .btn-primary {
   background-color: var(--color-primary);
@@ -122,279 +134,169 @@ body {
 }
 
 /* ============================================
-   KANBAN BOARD STYLES
+   NEWS FEED STYLES
    ============================================ */
-/* ----- BOARD LAYOUT ----- */
-.kanban-board {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md);
-  min-height: 400px;
+/* ----- SEARCH & FILTER BAR ----- */
+.news-controls {
+  margin-bottom: var(--space-xl);
 }
 
-/* ----- COLUMN ----- */
-.kanban-column {
-  background-color: var(--color-bg-secondary);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
+.search-form {
   display: flex;
-  flex-direction: column;
-  transition: background-color var(--transition);
-}
-
-.column-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: var(--space-sm);
   margin-bottom: var(--space-md);
-  padding-bottom: var(--space-sm);
-  border-bottom: 2px solid var(--color-border);
 }
 
-.column-header h2 {
-  font-size: 1rem;
-  margin-bottom: 0;
+.search-form input {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.search-form .btn {
+  white-space: nowrap;
+}
+
+/* ----- CATEGORY FILTERS ----- */
+.category-filters {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-sm);
 }
 
-.column-count {
-  font-size: 0.8rem;
-  background-color: var(--color-border);
-  color: var(--color-text-secondary);
-  padding: 2px 8px;
-  border-radius: 10px;
-}
-
-/* Column color indicators */
-.kanban-column[data-column="todo"] .column-header {
-  border-bottom-color: var(--color-info);
-}
-
-.kanban-column[data-column="inprogress"] .column-header {
-  border-bottom-color: var(--color-warning);
-}
-
-.kanban-column[data-column="done"] .column-header {
-  border-bottom-color: var(--color-success);
-}
-
-/* Add Task button in column header */
-.add-task-btn {
-  background: none;
+.category-btn {
+  padding: var(--space-xs) var(--space-md);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 2px 8px;
-  cursor: pointer;
-  font-size: 1.1rem;
+  border-radius: 20px;
+  background-color: var(--color-bg);
   color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-family: var(--font-family);
+  cursor: pointer;
   transition: all var(--transition);
 }
 
-.add-task-btn:hover {
+.category-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.category-btn.active {
   background-color: var(--color-primary);
   color: #ffffff;
   border-color: var(--color-primary);
 }
 
-/* ----- COLUMN TASKS (Drop Zone) ----- */
-.column-tasks {
-  flex: 1;
-  min-height: 100px;
+/* ----- NEWS GRID ----- */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* ----- ARTICLE CARD ----- */
+.article-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-}
-
-/* Visual feedback when dragging over */
-.column-tasks.drag-over {
-  background-color: var(--color-primary-light);
-  border: 2px dashed var(--color-primary);
-  border-radius: var(--radius-sm);
-}
-
-/* Empty column state */
-.column-empty {
-  text-align: center;
-  padding: var(--space-xl);
-  color: var(--color-text-light);
-  font-size: 0.9rem;
-}
-
-/* ----- TASK CARD ----- */
-.task-card {
-  background-color: var(--color-bg-card);
+  padding: 0;
+  overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: var(--space-md);
-  cursor: grab;
-  transition: box-shadow var(--transition), opacity var(--transition);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-card);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-.task-card:hover {
+.article-card:hover {
+  transform: translateY(-4px);
   box-shadow: var(--shadow-md);
 }
 
-/* When being dragged */
-.task-card.dragging {
-  opacity: 0.4;
+.article-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
 }
 
-.task-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-sm);
-}
-
-.task-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0;
-  flex: 1;
-}
-
-.task-actions {
-  display: flex;
-  gap: 2px;
-}
-
-.btn-icon {
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  cursor: pointer;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  color: var(--color-text-secondary);
-  transition: background-color var(--transition), color var(--transition);
-}
-
-.btn-icon:hover {
-  background-color: var(--color-border);
-  color: var(--color-text);
-}
-
-.task-description {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  margin-top: var(--space-xs);
-  margin-bottom: 0;
-}
-
-/* ----- MOBILE MOVE BUTTONS ----- */
-.task-move-buttons {
-  display: none;
-  gap: var(--space-xs);
-  margin-top: var(--space-sm);
-}
-
-.btn-move {
-  flex: 1;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+.article-image-placeholder {
+  width: 100%;
+  height: 180px;
   background-color: var(--color-bg-secondary);
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  font-family: var(--font-family);
-  transition: all var(--transition);
-}
-
-.btn-move:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-/* ----- MODAL ----- */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 200;
+  display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 3rem;
+}
+
+.article-content {
   padding: var(--space-md);
-}
-
-.modal-overlay.active {
   display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-.modal-content {
-  background-color: var(--color-bg);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  width: 100%;
-  max-width: 450px;
-  box-shadow: var(--shadow-md);
-}
-
-.modal-header {
+.article-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  font-size: 0.8rem;
 }
 
-.modal-header h2 {
-  margin-bottom: 0;
+.article-source {
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
+.article-date {
   color: var(--color-text-light);
-  padding: 0;
-  line-height: 1;
 }
 
-.modal-close:hover {
-  color: var(--color-text);
+.article-title {
+  font-size: 1rem;
+  margin-bottom: var(--space-sm);
+  line-height: 1.4;
+  /* Limit title to 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.modal-actions {
-  display: flex;
-  gap: var(--space-sm);
-  margin-top: var(--space-lg);
-}
-
-.modal-actions .btn {
+.article-description {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
   flex: 1;
-  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.article-card .btn {
+  align-self: flex-start;
 }
 
 /* ----- RESPONSIVE ----- */
 @media (max-width: 768px) {
-  .kanban-board {
+  .news-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-lg);
   }
 
-  .kanban-column {
-    min-height: auto;
-  }
-
-  /* Show move buttons on mobile (hide drag handle feel) */
-  .task-move-buttons {
-    display: flex;
-  }
-
-  .task-card {
-    cursor: default;
+  .search-form {
+    flex-direction: column;
   }
 }
 
 @media (max-width: 480px) {
-  .column-header h2 {
-    font-size: 0.9rem;
+  .category-filters {
+    justify-content: center;
   }
 }
