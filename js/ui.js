@@ -34,8 +34,8 @@ function renderArticles(articles) {
     const article = articles[i];
 
     // Use a placeholder if the article has no image
-    const imageHTML = article.urlToImage
-      ? `<img src="${article.urlToImage}" alt="${article.title}" class="article-image" onerror="this.style.display='none'" />`
+    const imageHTML = article.image
+      ? `<img src="${article.image}" alt="${article.title}" class="article-image" onerror="this.style.display='none'" />`
       : `<div class="article-image-placeholder">No Image</div>`;
 
     // Format the date (or show "Unknown date" if missing)

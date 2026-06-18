@@ -19,7 +19,7 @@ async function loadNews(category) {
   // Show loading spinner while fetching
   showLoading();
 
-  // Fetch headlines from NewsAPI (async function from api.js)
+  // Fetch headlines from GNews (async function from api.js)
   const result = await fetchTopHeadlines(category);
 
   // Check if the request was successful
