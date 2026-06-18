@@ -1,0 +1,400 @@
+/* ============================================
+   GLOBAL VARIABLES & STYLES
+   ============================================ */
+:root {
+  --color-primary: #2a9d8f;
+  --color-primary-light: #e0f2f1;
+  --color-bg: #f8f9fa;
+  --color-bg-secondary: #e9ecef;
+  --color-bg-card: #ffffff;
+  --color-text: #212529;
+  --color-text-secondary: #495057;
+  --color-text-light: #6c757d;
+  --color-border: #dee2e6;
+  
+  --color-info: #0dcaf0;
+  --color-warning: #ffc107;
+  --color-success: #198754;
+
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  
+  --transition: 0.2s ease;
+}
+
+[data-theme="dark"] {
+  --color-bg: #121212;
+  --color-bg-secondary: #1e1e1e;
+  --color-bg-card: #2d2d2d;
+  --color-text: #e0e0e0;
+  --color-text-secondary: #aaaaaa;
+  --color-text-light: #777777;
+  --color-border: #444444;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.section {
+  padding: var(--space-xl) 0;
+}
+
+.section-title {
+  margin-bottom: var(--space-xl);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-md) 0;
+}
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: var(--color-primary);
+}
+.nav-links {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all var(--transition);
+}
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+.btn-secondary {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.footer {
+  text-align: center;
+  padding: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-light);
+  margin-top: var(--space-xl);
+}
+
+/* ============================================
+   KANBAN BOARD STYLES
+   ============================================ */
+/* ----- BOARD LAYOUT ----- */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  min-height: 400px;
+}
+
+/* ----- COLUMN ----- */
+.kanban-column {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition);
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.column-header h2 {
+  font-size: 1rem;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.column-count {
+  font-size: 0.8rem;
+  background-color: var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Column color indicators */
+.kanban-column[data-column="todo"] .column-header {
+  border-bottom-color: var(--color-info);
+}
+
+.kanban-column[data-column="inprogress"] .column-header {
+  border-bottom-color: var(--color-warning);
+}
+
+.kanban-column[data-column="done"] .column-header {
+  border-bottom-color: var(--color-success);
+}
+
+/* Add Task button in column header */
+.add-task-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  transition: all var(--transition);
+}
+
+.add-task-btn:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+/* ----- COLUMN TASKS (Drop Zone) ----- */
+.column-tasks {
+  flex: 1;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Visual feedback when dragging over */
+.column-tasks.drag-over {
+  background-color: var(--color-primary-light);
+  border: 2px dashed var(--color-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* Empty column state */
+.column-empty {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+/* ----- TASK CARD ----- */
+.task-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  cursor: grab;
+  transition: box-shadow var(--transition), opacity var(--transition);
+}
+
+.task-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* When being dragged */
+.task-card.dragging {
+  opacity: 0.4;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.task-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.task-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.btn-icon {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.task-description {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+  margin-bottom: 0;
+}
+
+/* ----- MOBILE MOVE BUTTONS ----- */
+.task-move-buttons {
+  display: none;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.btn-move {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all var(--transition);
+}
+
+.btn-move:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ----- MODAL ----- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  width: 100%;
+  max-width: 450px;
+  box-shadow: var(--shadow-md);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-header h2 {
+  margin-bottom: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text-light);
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--color-text);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.modal-actions .btn {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+}
+
+/* ----- RESPONSIVE ----- */
+@media (max-width: 768px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .kanban-column {
+    min-height: auto;
+  }
+
+  /* Show move buttons on mobile (hide drag handle feel) */
+  .task-move-buttons {
+    display: flex;
+  }
+
+  .task-card {
+    cursor: default;
+  }
+}
+
+@media (max-width: 480px) {
+  .column-header h2 {
+    font-size: 0.9rem;
+  }
+}
