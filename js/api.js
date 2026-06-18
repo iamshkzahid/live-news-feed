@@ -1,11 +1,7 @@
 /* ============================================
    API.JS — News Feed API Functions
    ============================================
-   Purpose: Handles ALL API requests to NewsAPI.
-   
-   Uses fetch() with async/await for clean asynchronous code.
-   All errors are caught and returned as user-friendly messages.
-   ============================================ */
+*/
 
 // fetchTopHeadlines() - Fetches top headlines from NewsAPI
 async function fetchTopHeadlines(category) {
