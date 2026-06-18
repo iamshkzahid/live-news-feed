@@ -83,5 +83,9 @@ The application handles errors at multiple levels:
 
 ## Author
 
-**Member 3** — Sauryaman Bisen  
-OJT Capstone Track A — Dev Agency
+Sauryaman Bisen  
+
+## License
+
+This project is licensed under the MIT License.
+
