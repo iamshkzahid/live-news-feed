@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kanban Task Board — Organize tasks with drag-and-drop across To Do, In Progress, and Done columns." />
+  <title>Kanban Board — OJT Capstone</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">Dev Agency</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">← Back to Portfolio</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Dark</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="section">
+    <div class="container">
+      <a href="../index.html" class="back-link">← Back to Portfolio</a>
+      <h1 class="section-title">Kanban Task Board</h1>
+
+      <!-- Kanban Board — 3 Columns -->
+      <div class="kanban-board">
+
+        <!-- Column 1: To Do -->
+        <div class="kanban-column" data-column="todo">
+          <div class="column-header">
+            <h2>To Do <span class="column-count counter-badge">0</span></h2>
+            <button class="add-task-btn" data-column="todo" title="Add task">+</button>
+          </div>
+          <div class="column-tasks">
+            <!-- Tasks rendered by ui.js -->
+          </div>
+        </div>
+
+        <!-- Column 2: In Progress -->
+        <div class="kanban-column" data-column="inprogress">
+          <div class="column-header">
+            <h2>In Progress <span class="column-count counter-badge">0</span></h2>
+            <button class="add-task-btn" data-column="inprogress" title="Add task">+</button>
+          </div>
+          <div class="column-tasks">
+            <!-- Tasks rendered by ui.js -->
+          </div>
+        </div>
+
+        <!-- Column 3: Done -->
+        <div class="kanban-column" data-column="done">
+          <div class="column-header">
+            <h2>Done <span class="column-count counter-badge">0</span></h2>
+            <button class="add-task-btn" data-column="done" title="Add task">+</button>
+          </div>
+          <div class="column-tasks">
+            <!-- Tasks rendered by ui.js -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Task Modal (Add/Edit) -->
+  <div class="modal-overlay" id="task-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Add New Task</h2>
+        <button class="modal-close" id="modal-close-btn" aria-label="Close">×</button>
+      </div>
+
+      <div class="form-group">
+        <label for="task-title-input">Task Title *</label>
+        <input type="text" id="task-title-input" placeholder="Enter task title" />
+      </div>
+
+      <div class="form-group">
+        <label for="task-desc-input">Description (optional)</label>
+        <textarea id="task-desc-input" placeholder="Enter task description" rows="3"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" id="modal-save-btn">Add Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Dev Agency — Kanban Board</p>
+  </footer>
+
+  <!-- Scripts: storage → state → dragdrop → ui → main -->
+  <script src="js/theme.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/dragdrop.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
