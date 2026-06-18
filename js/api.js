@@ -1,91 +1,56 @@
-/* ============================================
-   API.JS — News Feed API Functions
-   ============================================
-*/
-
-// fetchTopHeadlines() - Fetches top headlines from NewsAPI Proxy
+// fetchTopHeadlines() - Fetches top headlines from GNews
 async function fetchTopHeadlines(category) {
-  // Build the API URL for the saurav.tech proxy
-  const cat = category || "general";
-  const url = `${NEWS_API_CONFIG.baseUrl}/top-headlines/category/${cat}/${NEWS_API_CONFIG.defaultCountry}.json`;
+  // GNews requires a category. If none provided, default to general.
+  const cat = (category && category !== "general") ? category : "general";
+  
+  let url = `${NEWS_API_CONFIG.baseUrl}/top-headlines?`;
+  url += `category=${cat}`;
+  url += `&lang=${NEWS_API_CONFIG.defaultLang}`;
+  url += `&country=${NEWS_API_CONFIG.defaultCountry}`;
+  url += `&max=${NEWS_API_CONFIG.pageSize}`;
+  url += `&apikey=${NEWS_API_CONFIG.apiKey}`;
 
-  // Make the API request
-  const result = await makeApiRequest(url);
-  
-  // Apply pagination locally if needed, since proxy returns all
-  if (result.success && result.articles) {
-    result.articles = result.articles.slice(0, NEWS_API_CONFIG.pageSize);
-  }
-  
-  return result;
+  return await makeApiRequest(url);
 }
 
 // searchNews() - Searches for news articles by keyword
 async function searchNews(query) {
-  // Build the search API URL (Using CNN as a broad source since proxy doesn't support generic keyword search)
-  const url = `${NEWS_API_CONFIG.baseUrl}/everything/cnn.json`;
+  let url = `${NEWS_API_CONFIG.baseUrl}/search?`;
+  url += `q=${encodeURIComponent(query)}`;
+  url += `&lang=${NEWS_API_CONFIG.defaultLang}`;
+  url += `&country=${NEWS_API_CONFIG.defaultCountry}`;
+  url += `&max=${NEWS_API_CONFIG.pageSize}`;
+  url += `&apikey=${NEWS_API_CONFIG.apiKey}`;
 
-  // Make the API request
-  const result = await makeApiRequest(url);
-  
-  if (result.success && result.articles) {
-    // Filter the articles manually based on the query
-    const lowerQuery = query.toLowerCase();
-    result.articles = result.articles.filter(article => {
-      const titleMatch = article.title && article.title.toLowerCase().includes(lowerQuery);
-      const descMatch = article.description && article.description.toLowerCase().includes(lowerQuery);
-      return titleMatch || descMatch;
-    });
-    
-    // Apply pagination
-    result.articles = result.articles.slice(0, NEWS_API_CONFIG.pageSize);
-  }
-  
-  return result;
+  return await makeApiRequest(url);
 }
 
 // makeApiRequest() - Makes a fetch request and handles errors
 async function makeApiRequest(url) {
   try {
-    // Send the fetch request
-    const response = await fetch(url);
+    if (NEWS_API_CONFIG.apiKey === "YOUR_API_KEY_HERE") {
+      return { success: false, articles: [], error: "API key not configured." };
+    }
 
-    // Parse the JSON response
+    const response = await fetch(url);
     const data = await response.json();
 
-    // Check if the API returned an error
-    if (data.status !== "ok") {
-      return {
-        success: false,
-        articles: [],
-        error: data.message || "An error occurred while fetching news."
-      };
+    // Handle HTTP errors
+    if (!response.ok) {
+      if (response.status === 401) return { success: false, articles: [], error: "Invalid API key." };
+      if (response.status === 403) return { success: false, articles: [], error: "API limit reached." };
+      if (response.status === 429) return { success: false, articles: [], error: "Too many requests. Please wait." };
+      return { success: false, articles: [], error: data.errors?.[0] || "An error occurred fetching news." };
     }
 
-    // Check if there are no results
-    if (data.articles.length === 0) {
-      return {
-        success: true,
-        articles: [],
-        error: null
-      };
+    if (!data.articles || data.articles.length === 0) {
+      return { success: true, articles: [], error: null };
     }
 
-    // Return the articles
-    return {
-      success: true,
-      articles: data.articles,
-      error: null
-    };
+    return { success: true, articles: data.articles, error: null };
 
   } catch (error) {
-    // Handle network errors (no internet, server down, etc.)
     console.error("Network error:", error);
-    return {
-      success: false,
-      articles: [],
-      error: "Network error. Please check your internet connection and try again."
-    };
+    return { success: false, articles: [], error: "Network error. Please check your connection." };
   }
 }
-
